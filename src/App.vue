@@ -1,17 +1,23 @@
+<!--
+ * @Author: bianjie
+ * @Date: 2020-06-22 13:53:53
+ * @LastEditors: bianjie
+ * @LastEditTime: 2020-06-22 15:41:15
+-->
 <script>
-	export default {
-		onLaunch: function() {
-			console.log('App Launch')
-		},
-		onShow: function() {
-			console.log('App Show')
-		},
-		onHide: function() {
-			console.log('App Hide')
-		}
-	}
+export default {
+  onLaunch() {
+    console.log('App Launch');
+  },
+  onShow() {
+    console.log('App Show');
+  },
+  onHide() {
+    console.log('App Hide');
+  },
+};
 </script>
 
 <style>
-	/*每个页面公共css */
+/*每个页面公共css */
 </style>
