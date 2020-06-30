@@ -19,6 +19,8 @@
       <text>{{ content.body }}</text>
     </view>
     <view class="footer">
+      <text>{{ content.num }} 点赞</text>
+      <text>{{ content.num }} 评论 </text>
       <text />
     </view>
   </view>
@@ -42,16 +44,18 @@ export default {
   background-color: white;
   text-align: left;
   display: flex;
-  margin-top: 20upx;
+  margin-top: 4upx;
+  padding: 30upx;
   flex-direction: column;
   .title {
-    font-size: 25upx;
-    font-weight: bold;
+    font-size: 32upx;
+    font-weight: 600;
     margin-bottom: 10upx;
+    color: #1a1a1a;
   }
   .user-title {
     display: flex;
-    font-size: 25upx;
+    font-size: 27upx;
     margin-bottom: 10upx;
     .user-picture {
       width: 30upx;
@@ -59,8 +63,15 @@ export default {
     }
   }
   .pre-text {
-    font-size: 25upx;
+    font-size: 27upx;
     margin-bottom: 10upx;
+    color: #444;
+  }
+  .footer {
+    font-size: 25upx;
+    font-family: Helvetica Neue, Helvetica, Roboto, Segoe UI, Arial, sans-serif;
+    color: #999;
+    display: flex;
   }
 }
 </style>>
