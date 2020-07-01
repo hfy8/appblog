@@ -2,13 +2,13 @@
  * @Author: bianjie
  * @Date: 2020-06-24 10:55:45
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-30 14:36:24
+ * @LastEditTime: 2020-07-01 09:24:44
 -->
 <template>
   <view class="content">
     <Index v-show="showCover" class="cover-img" @closeCover="closeCover" />
     <view>
-      <top-bar v-model="searchContent" @confirm="search" />
+      <top-bar v-show="!showCover" v-model="searchContent" @confirm="search" />
       <view>
         <scroll-view v-show="!showCover" :class="NotchScreen?'scroll-view-notch':'scroll-view'" class="scroll-view" scroll-y="true" @scroll="scroll">
           <labelView v-for="(item,index) in content" :key="index" :content="item" />
