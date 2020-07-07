@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 12:20:22
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-29 09:51:21
+ * @LastEditTime: 2020-07-07 14:03:16
 -->
 <template>
   <view class="label-content">
@@ -11,9 +11,11 @@
     </view>
     <view class="user-title">
       <view>
-        <image class="user-picture" />
+        <image class="user-picture" :src="imgUrl" />
       </view>
-      <text>{{ content.name }}</text>
+      <text class="user-name">
+        {{ content.name }}
+      </text>
     </view>
     <view class="pre-text">
       <text>{{ content.body }}</text>
@@ -34,7 +36,24 @@ export default {
       required: true,
     },
   },
-  methods: {},
+  computed: {
+    imgUrl() {
+      let url = '';
+      this.$minio.presignedUrl('GET',
+        'labels',
+        this.content.imgName,
+        24 * 60 * 60,
+        (err, presignedUrl) => {
+          if (err) {
+            return console.log(err);
+          }
+          url = presignedUrl;
+        });
+      return url;
+    },
+  },
+  methods: {
+  },
 };
 </script>
 
@@ -57,9 +76,17 @@ export default {
     display: flex;
     font-size: 27upx;
     margin-bottom: 10upx;
+    line-height: 30upx;
+    vertical-align: middle;
     .user-picture {
       width: 30upx;
       height: 30upx;
+      border-radius: 50%;
+    }
+    .user-name{
+      margin-left: 10upx;
+      font-weight: bold;
+
     }
   }
   .pre-text {

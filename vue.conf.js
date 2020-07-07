@@ -2,17 +2,17 @@
  * @Author: bianjie
  * @Date: 2020-06-19 17:29:48
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-24 14:24:49
+ * @LastEditTime: 2020-07-07 10:57:13
  */
 const serverProxy = { // 配置跨域
-  '/web': {
-    target: 'https://ecloud.10086.cn:31008/api/web/', // 这里后台的地址模拟的;应该填写你们真实的后台接口
-    ws: true,
-    changOrigin: true, // 允许跨域
-    pathRewrite: {
-      '^/web': '', // 请求的时候使用这个api就可以
-    },
-  },
+  // 'http://localhost:9000/labels': {
+  //   target: 'http://39.106.3.0:9000/labels', // 这里后台的地址模拟的;应该填写你们真实的后台接口
+  //   ws: true,
+  //   changOrigin: true, // 允许跨域
+  //   pathRewrite: {
+  //     '^/http://localhost:9000/labels': '', // 请求的时候使用这个api就可以
+  //   },
+  // },
 };
 const env = process.env.NODE_ENV;
 

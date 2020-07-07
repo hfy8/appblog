@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 10:55:45
  * @LastEditors: bianjie
- * @LastEditTime: 2020-07-01 09:24:44
+ * @LastEditTime: 2020-07-07 13:45:26
 -->
 <template>
   <view class="content">
@@ -10,7 +10,13 @@
     <view>
       <top-bar v-show="!showCover" v-model="searchContent" @confirm="search" />
       <view>
-        <scroll-view v-show="!showCover" :class="NotchScreen?'scroll-view-notch':'scroll-view'" class="scroll-view" scroll-y="true" @scroll="scroll">
+        <scroll-view
+          v-show="!showCover"
+          :class="NotchScreen?'scroll-view-notch':'scroll-view'"
+          class="scroll-view"
+          scroll-y="true"
+          @scroll="scroll"
+        >
           <labelView v-for="(item,index) in content" :key="index" :content="item" />
         </scroll-view>
       </view>
@@ -35,13 +41,28 @@ export default {
           name: 'asdsadsa',
           title: '吃饭没1',
           body: 'asdasdasdd',
-          num: 100,
+          imgName: 'VCG211257992778.jpg',
         },
         {
           name: 'asdsadsa',
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
+        },
+        {
+          name: 'asdsadsa',
+          title: '吃饭没',
+          body: 'asdasdasdd',
+          num: 100,
+          imgName: 'VCG211257992778.jpg',
+        },
+        {
+          name: 'asdsadsa',
+          title: '吃饭没',
+          body: 'asdasdasdd',
+          num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -49,6 +70,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -56,6 +78,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -63,6 +86,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -70,6 +94,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -77,6 +102,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -84,6 +110,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -91,6 +118,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
+          imgName: 'VCG211257992778.jpg',
 
         },
         {
@@ -98,21 +126,7 @@ export default {
           title: '吃饭没',
           body: 'asdasdasdd',
           num: 100,
-
-        },
-        {
-          name: 'asdsadsa',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-
-        },
-        {
-          name: 'asdsadsa',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-
+          imgName: 'VCG211257992778.jpg',
         },
       ],
     };
@@ -127,8 +141,7 @@ export default {
       return false;
     },
   },
-  onLoad() {
-  },
+  onLoad() {},
   methods: {
     // 底部控制
     scroll(event) {
@@ -156,7 +169,7 @@ export default {
   .scroll-view {
     height: calc(100vh - 56px);
   }
-  .scroll-view-notch{
+  .scroll-view-notch {
     height: calc(100vh - 86px);
   }
 }
