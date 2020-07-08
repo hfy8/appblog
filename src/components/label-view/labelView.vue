@@ -6,24 +6,33 @@
 -->
 <template>
   <view class="label-content">
-    <view class="title">
-      <text>{{ content.title }}</text>
-    </view>
-    <view class="user-title">
-      <view>
-        <image class="user-picture" :src="imgUrl" />
+    <view class="label-body">
+      <view class="title">
+        <text>{{ content.title }}</text>
       </view>
-      <text class="user-name">
-        {{ content.name }}
-      </text>
-    </view>
-    <view class="pre-text">
-      <text>{{ content.body }}</text>
-    </view>
-    <view class="footer">
-      <text>{{ content.num }} 点赞</text>
-      <text>{{ content.num }} 评论 </text>
-      <text />
+      <view class="user-title">
+        <view>
+          <image class="user-picture" :src="url" />
+        </view>
+        <text class="user-name">
+          {{ content.name }}
+        </text>
+      </view>
+      <view class="pre-text">
+        <text>{{ content.body }}</text>
+      </view>
+      <view class="footer">
+        <view class="operation">
+          <view class="footer-hand">
+            <uni-icons type="hand-thumbsup" size="15" />
+            <text>{{ content.num ||0 }}</text>
+          </view>
+          <view class="footer-chat">
+            <uni-icons type="chat" size="15" />
+            <text>{{ content.num ||0 }}</text>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -36,10 +45,25 @@ export default {
       required: true,
     },
   },
-  computed: {
+  data() {
+    return {
+      url: '',
+    };
+  },
+  watch: {
+    // 监听图片名称变化跟新地址
+    'content.imgName': () => {
+      this.imgUrl();
+    },
+  },
+  mounted() {
+    this.imgUrl();
+  },
+  methods: {
+    // 获取图片URL地址
     imgUrl() {
-      let url = '';
-      this.$minio.presignedUrl('GET',
+      this.$minio.presignedUrl(
+        'GET',
         'labels',
         this.content.imgName,
         24 * 60 * 60,
@@ -47,12 +71,10 @@ export default {
           if (err) {
             return console.log(err);
           }
-          url = presignedUrl;
-        });
-      return url;
+          this.url = presignedUrl;
+        },
+      );
     },
-  },
-  methods: {
   },
 };
 </script>
@@ -64,8 +86,10 @@ export default {
   text-align: left;
   display: flex;
   margin-top: 4upx;
-  padding: 30upx;
   flex-direction: column;
+  .label-body {
+    padding: 30upx;
+  }
   .title {
     font-size: 32upx;
     font-weight: 600;
@@ -83,10 +107,9 @@ export default {
       height: 30upx;
       border-radius: 50%;
     }
-    .user-name{
+    .user-name {
       margin-left: 10upx;
       font-weight: bold;
-
     }
   }
   .pre-text {
@@ -99,6 +122,17 @@ export default {
     font-family: Helvetica Neue, Helvetica, Roboto, Segoe UI, Arial, sans-serif;
     color: #999;
     display: flex;
+    align-items: center;
+    .operation {
+      display: flex;
+      align-items: flex-end;
+      justify-content: end;
+      margin-left: auto;
+      vertical-align: middle;
+      .footer-chat{
+        margin-left: 10upx;
+      }
+    }
   }
 }
 </style>>
