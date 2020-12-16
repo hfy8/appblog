@@ -8,6 +8,13 @@
 			}
 		},
 		{
+			"path": "pages/content/index",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/outBrow/outBrow",
 			"style": {
 				"navigationBarTitleText": "内置浏览器",
@@ -31,12 +38,12 @@
 			}
 		}
 	    ,{
-            "path" : "components/topbar/globalTopBar/globalTopBar",
-            "style" : {}
-        }
-        ,{
-            "path" : "components/topbar/topbar",
-            "style" : {}
+            "path" : "pages/editor/index",
+            "style": {
+				"navigationBarTitleText": "发表",
+				"navigationStyle": "custom"
+
+			}
         }
     ],
 	"globalStyle": {

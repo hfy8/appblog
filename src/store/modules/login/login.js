@@ -2,11 +2,11 @@
  * @Author: bianjie
  * @Date: 2020-06-22 12:33:25
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-22 12:52:51
+ * @LastEditTime: 2020-11-30 17:18:37
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { postJSONAction } from '@/util/apiTool';
+import { axiosGet, axiosPost } from '@/util/api-util';
 import { buildMutType } from '@/util/mutationTool';
 
 const MUTATION_TOKEN = buildMutType('TOKEN');
@@ -28,7 +28,7 @@ const actions = {
    * @param {*} params
    */
   getLoginToken({ commit }, params) {
-    postJSONAction('/user/login', params, commit, MUTATION_TOKEN.TOKEN_CLEAR, MUTATION_TOKEN_REQUEST, MUTATION_TOKEN_FAIL);
+    axiosGet('/oauth/token', params, commit, MUTATION_TOKEN.TOKEN_CLEAR, MUTATION_TOKEN_REQUEST, MUTATION_TOKEN_FAIL);
   },
   /**
    * 发动短信验证码请求
@@ -36,11 +36,12 @@ const actions = {
    * @param {*} params
    */
   sendNote({ commit }, params) {
-    postJSONAction('/user/sendnote', params, commit);
+    axiosPost('/user/sendnote', params, commit);
   },
 };
 
 export default {
+  namespaced: true,
   state,
   mutations,
   actions,

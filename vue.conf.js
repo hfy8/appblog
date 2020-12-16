@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-19 17:29:48
  * @LastEditors: bianjie
- * @LastEditTime: 2020-07-07 10:57:13
+ * @LastEditTime: 2020-10-23 17:26:24
  */
 const serverProxy = { // 配置跨域
   // 'http://localhost:9000/labels': {
@@ -20,6 +20,9 @@ module.exports = {
   // 输出文件目录   文件夹名
   // 放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。    资源放的目录
   // 指定生成的 index.html 的输出路径 (相对于 outputDir)。也可以是一个绝对路径    index的路劲和名字
+  node: {
+    fs: true,
+  },
   // eslint-loader 是否在保存的时候检查
   lintOnSave: true,
   publicPath: env === 'production' ? '/blog-static' : '/',
@@ -32,7 +35,7 @@ module.exports = {
         javascriptEnabled: true,
       },
       sass: {
-        prependData: '@import "@/style/var.scss";',
+        prependData: '@import "@/style/global.scss";',
       },
     },
   },

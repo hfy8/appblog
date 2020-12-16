@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 10:55:45
  * @LastEditors: bianjie
- * @LastEditTime: 2020-07-07 13:45:26
+ * @LastEditTime: 2020-12-15 18:18:16
 -->
 <template>
   <view class="content">
@@ -16,8 +16,9 @@
           class="scroll-view"
           scroll-y="true"
           @scroll="scroll"
+          @scrolltolower="scrolltolower"
         >
-          <labelView v-for="(item,index) in content" :key="index" :content="item" />
+          <labelView v-for="(item,index) in list" :key="index" :content="item" />
         </scroll-view>
       </view>
       <tab-bar :tab-show="showTab&&!showCover" />
@@ -27,6 +28,8 @@
 
 <script>
 import labelView from '@/components/label-view/labelView.vue';
+import { mapActions, mapState } from 'vuex';
+import Vue from 'vue';
 import Index from '../index/index.vue';
 
 export default {
@@ -36,102 +39,11 @@ export default {
       showCover: true,
       showTab: true,
       searchContent: '',
-      content: [
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没1',
-          body: 'asdasdasdd',
-          imgName: 'VCG211257992778.jpg',
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: 'asds江湖有伟大侠adsa',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: 'asdsad江湖有伟大侠sa',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-
-        },
-        {
-          name: '江湖有伟大侠',
-          title: '吃饭没',
-          body: 'asdasdasdd',
-          num: 100,
-          imgName: 'VCG211257992778.jpg',
-        },
-      ],
+      list: [],
     };
   },
   computed: {
+    ...mapState('issue', ['issueGlobalList', 'globalTotal']),
     NotchScreen() {
       // #ifdef APP-PLUS
       if (plus) {
@@ -140,9 +52,30 @@ export default {
       // #endif
       return false;
     },
+    page() {
+      return Math.floor((this.list.length / 5) + 1);
+    },
   },
-  onLoad() {},
+  mounted() {
+    const userInfo = uni.getStorageSync('token');
+    if (!userInfo) {
+      uni.navigateTo({ url: '/pages/login/index' });
+    }
+    const data = JSON.parse(uni.getStorageSync('token'));
+
+    if (data) {
+      Object.assign(Vue.axios.defaults.headers, { Authorization: `${data.token_type} ${data.access_token}` });
+    }
+    this.getGlobalIssueList({ page: this.page, size: 5 }).then(() => {
+      this.list = [...this.issueGlobalList];
+    });
+    this.getFollows();
+  },
   methods: {
+    ...mapActions('issue', ['getGlobalIssueList']),
+    ...mapActions('follow', [
+      'getFollows',
+    ]),
     // 底部控制
     scroll(event) {
       if (event.detail.deltaY > 0) {
@@ -154,6 +87,13 @@ export default {
     // 关闭广告遮罩
     closeCover(showCover) {
       this.showCover = showCover;
+    },
+    async scrolltolower() {
+      if (this.list.length === this.globalTotal && this.list.length !== 0) {
+        return;
+      }
+      await this.getGlobalIssueList({ page: this.page, size: 5 });
+      this.list.push(...this.issueGlobalList);
     },
     search() {
     },

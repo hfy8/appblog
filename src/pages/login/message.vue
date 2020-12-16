@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 16:48:28
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-24 18:22:20
+ * @LastEditTime: 2020-09-25 19:37:26
 -->
 <template>
   <view class="content">
@@ -21,7 +21,8 @@
         </button>
       </view>
       <view class="btn-row">
-        <button plain class="plain" @tap="$emit('setCurrent','Login')">
+        c
+        <button plain class="plain" @tap="$emit('set-current','Login')">
           密码登陆
         </button>
       </view>

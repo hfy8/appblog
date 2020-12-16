@@ -1,7 +1,7 @@
 <template>
   <view class="uni-searchbar">
     <view class="top-scan">
-      <uni-icons type="scan" size="32" @click="scan" />
+      <uni-icons type="scan" color="white" size="32" @click="scan" />
     </view>
     <view
       :style="{borderRadius:radius+'px',backgroundColor: bgColor}"
@@ -46,7 +46,7 @@
       {{ cancelText }}
     </text>
     <view v-if="settingAble" class="top-setting">
-      <uni-icons type="settings" size="32" @click="setting" />
+      <uni-icons type="settings" color="white" size="32" @click="setting" />
     </view>
   </view>
 </template>
@@ -164,7 +164,8 @@ $uni-searchbar-height: 36px;
   /* #endif */
   flex-direction: row;
   position: relative;
-  padding: $uni-spacing-col-base;
+  height: 56px;
+  padding: 0 $uni-spacing-col-base;
   background-color: $uni-bg-color;
 }
 

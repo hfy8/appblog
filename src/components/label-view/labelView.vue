@@ -2,35 +2,39 @@
  * @Author: bianjie
  * @Date: 2020-06-24 12:20:22
  * @LastEditors: bianjie
- * @LastEditTime: 2020-07-07 14:03:16
+ * @LastEditTime: 2020-12-15 16:34:53
 -->
 <template>
   <view class="label-content">
     <view class="label-body">
-      <view class="title">
+      <view class="title" @tap="showDetail(content)">
         <text>{{ content.title }}</text>
       </view>
       <view class="user-title">
         <view>
-          <image class="user-picture" :src="url" />
+          <imageCache
+            clas="user-picture"
+            :url="`${baseConfig.API_PATH}minio/down/${content.uicon}`"
+            mode="scaleToFill"
+          />
         </view>
         <text class="user-name">
-          {{ content.name }}
+          {{ content.uname }}
         </text>
       </view>
-      <view class="pre-text">
-        <text>{{ content.body }}</text>
+      <view class="uni-flex uni-row">
+        <view class="flex-item" @tap="showDetail(content)">
+          <view class="pre-text">
+            <text>{{ content.content.replace(/<[^>]+>/g,"") }}</text>
+          </view>
+        </view>
+        <view v-show="content.images" class="flex-image">
+          <imageCache class="info-image" :url="`${this.baseConfig.API_PATH}minio/down/${content.images.split(',')[0]}`" mode="scaleToFill" @tap="previewImg" />
+        </view>
       </view>
       <view class="footer">
         <view class="operation">
-          <view class="footer-hand">
-            <uni-icons type="hand-thumbsup" size="15" />
-            <text>{{ content.num ||0 }}</text>
-          </view>
-          <view class="footer-chat">
-            <uni-icons type="chat" size="15" />
-            <text>{{ content.num ||0 }}</text>
-          </view>
+          {{ content.thumbUp }} 赞同.{{ content.discussNum }} 讨论
         </view>
       </view>
     </view>
@@ -38,7 +42,10 @@
 </template>
 
 <script>
+import imageCache from '../imageCache/imageCache.vue';
+
 export default {
+  components: { imageCache },
   props: {
     content: {
       type: Object,
@@ -47,33 +54,22 @@ export default {
   },
   data() {
     return {
+      uicon: '',
+      icon: '',
       url: '',
     };
   },
-  watch: {
-    // 监听图片名称变化跟新地址
-    'content.imgName': () => {
-      this.imgUrl();
-    },
-  },
-  mounted() {
-    this.imgUrl();
-  },
   methods: {
-    // 获取图片URL地址
-    imgUrl() {
-      this.$minio.presignedUrl(
-        'GET',
-        'labels',
-        this.content.imgName,
-        24 * 60 * 60,
-        (err, presignedUrl) => {
-          if (err) {
-            return console.log(err);
-          }
-          this.url = presignedUrl;
-        },
-      );
+    // 详情页面
+    showDetail(item) {
+      this.$navigateTo({ url: `/pages/content/index?item=${encodeURIComponent(JSON.stringify(item))}` });
+    },
+    // 预览
+    previewImg(e) {
+      uni.previewImage({
+        current: e.target.dataset.src,
+        urls: [e.target.dataset.src],
+      });
     },
   },
 };
@@ -90,9 +86,26 @@ export default {
   .label-body {
     padding: 30upx;
   }
+  .uni-row {
+    display: flex;
+    flex-direction: row;
+  }
+  .flex-item {
+    flex: 2;
+  }
+  .flex-image {
+    flex: 1;
+    text-align: right;
+  }
+  .info-image {
+    width: 150upx;
+    height: 150upx;
+    background-color: black;
+    object-fit: cover;
+  }
   .title {
     font-size: 32upx;
-    font-weight: 600;
+    font-weight: bold;
     margin-bottom: 10upx;
     color: #1a1a1a;
   }
@@ -109,27 +122,35 @@ export default {
     }
     .user-name {
       margin-left: 10upx;
-      font-weight: bold;
+      font-weight: 500;
+      color: rgb(56, 55, 55);
     }
   }
   .pre-text {
+    display: -webkit-box;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
     font-size: 27upx;
+    height: 150upx;
     margin-bottom: 10upx;
     color: #444;
+    word-wrap: break-word;
+    white-space: normal;
+    word-break: break-all;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
   }
   .footer {
     font-size: 25upx;
     font-family: Helvetica Neue, Helvetica, Roboto, Segoe UI, Arial, sans-serif;
     color: #999;
     display: flex;
-    align-items: center;
     .operation {
-      display: flex;
-      align-items: flex-end;
-      justify-content: end;
-      margin-left: auto;
       vertical-align: middle;
-      .footer-chat{
+      text-align: left;
+      .footer-chat {
         margin-left: 10upx;
       }
     }

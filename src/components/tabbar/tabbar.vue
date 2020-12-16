@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-28 16:15:25
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-30 16:08:20
+ * @LastEditTime: 2020-12-09 14:00:04
 -->
 <template>
   <uni-transition :class="placement" :mode-class="['slide-bottom']" :show="tabShow">
@@ -13,24 +13,27 @@
         :class="currentTabIndex == index ? 'on' : ''"
         @tap="switchTab(index)"
       >
-        <view class="icon">
-          <uni-icons
-            class="iconfont"
-            :type="item.icon"
-            size="20"
+        <navigator :url="item.router" open-type="navigate">
+          <view class="icon">
+            <uni-icons
+              class="iconfont"
+              :type="item.icon"
+              size="20"
+
+              :style="[currentTabIndex == index ? {'color': tintColor} : {'color': color}]"
+            />
+            <text v-if="item.badge" class="uni_badge">
+              {{ item.badge }}
+            </text>
+            <text v-if="item.badgeDot" class="uni_badge uni_badge_dot" />
+          </view>
+          <view
+            class="text"
             :style="[currentTabIndex == index ? {'color': tintColor} : {'color': color}]"
-          />
-          <text v-if="item.badge" class="uni_badge">
-            {{ item.badge }}
-          </text>
-          <text v-if="item.badgeDot" class="uni_badge uni_badge_dot" />
-        </view>
-        <view
-          class="text"
-          :style="[currentTabIndex == index ? {'color': tintColor} : {'color': color}]"
-        >
-          {{ item.text }}
-        </view>
+          >
+            {{ item.text }}
+          </view>
+        </navigator>
       </view>
     </block>
   </uni-transition>
@@ -66,8 +69,9 @@ export default {
           badgeDot: true,
         },
         {
-          icon: 'settings',
-          text: '设置',
+          icon: 'plus',
+          text: '发表',
+          router: '/pages/editor/index',
         },
       ],
       currentTabIndex: this.current,

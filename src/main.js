@@ -2,27 +2,43 @@
  * @Author: bianjie
  * @Date: 2020-06-22 13:53:53
  * @LastEditors: bianjie
- * @LastEditTime: 2020-07-07 10:56:56
+ * @LastEditTime: 2020-12-07 21:05:35
  */
 import Vue from 'vue';
+import axios from 'axios';
 import topBar from '@/components/topbar/topbar.vue';
 import { validateUrl } from '@/util/util';
+import uuid from 'uuid';
 import uniIcons from './components/uni-icons/uni-icons.vue';
 import App from './App.vue';
 import tabBar from './components/tabbar/tabbar.vue';
+import bjxFrom from './components/bjx-form/bjx-form.vue';
+import bjxFromItem from './components/bjx-form/bjx-form-item.vue';
+import axiosPlugin from './util/axios';
+import store from './store';
+import { navigateTo } from './util/routerUtil';
+
 // 底部导航栏
 Vue.component('tab-bar', tabBar);
 // 头部组件
 Vue.component('top-bar', topBar);
+// 表单组件
+Vue.component('bj-form', bjxFrom);
+Vue.component('bj-form-item', bjxFromItem);
 const Minio = require('minio');
 
-const minioClient = new Minio.Client({
-  endPoint: '39.106.3.0',
-  port: 9999,
-  useSSL: false,
-  accessKey: 'minioadmin',
-  secretKey: 'minioadmin',
-});
+let minioClient;
+try {
+  minioClient = new Minio.Client({
+    endPoint: '39.106.3.0',
+    port: 9000,
+    useSSL: false,
+    accessKey: 'minioadmin',
+    secretKey: 'minioadmin',
+  });
+} catch (error) {
+  console.log(error);
+}
 
 process.UNI_LIBRARIES = ['vant', '@dcloudio/uni-ui'];
 if (process.env.NODE_ENV === 'production') {
@@ -36,13 +52,36 @@ if (process.env.NODE_ENV === 'dev') {
     VUE_APP_API_PATH: 'http://localhost:3000/app/',
   });
 }
+Vue.use(axiosPlugin);
 Vue.config.productionTip = false;
 Vue.prototype.$testUrl = validateUrl;
 Vue.prototype.$minio = minioClient;
+Vue.prototype.$uuid = uuid;
+Vue.$store = store;
+Vue.prototype.$navigateTo = navigateTo;
 App.mpType = 'app';
 App.components = { uniIcons };
-
-const app = new Vue({
-  ...App,
-});
-app.$mount();
+const configUrl = process.env.NODE_ENV !== 'production'
+  ? '/config.json' : `${process.env.VUE_APP_PUBLIC_URL}/config.json`;
+if (process.env.VUE_APP_PLATFORM === 'app-plus') {
+  Vue.prototype.baseConfig = {
+    API_PATH: 'http://39.106.3.0:10000/',
+    AUTH_PATH: 'http://39.106.3.0:9999/',
+  };
+  const app = new Vue({
+    store,
+    ...App,
+  });
+  app.$mount();
+} else {
+  axios(configUrl)
+    .then((result) => {
+      Vue.prototype.baseConfig = result.data;
+    }).then(() => {
+      const app = new Vue({
+        store,
+        ...App,
+      });
+      app.$mount();
+    });
+}

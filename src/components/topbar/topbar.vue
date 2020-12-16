@@ -1,8 +1,12 @@
 <template>
-  <uniTransition :mode-class="['slide-bottom']" :class="{'fixed-top':fixed}" :show="topShow">
+  <uniTransition
+    :mode-class="[fixed?'slide-bottom':'']"
+    :class="{'fixed-top':fixed}"
+    :show="topShow"
+  >
     <view :class="NotchScreen?'top-header-notch':'top-header'">
       <view v-if="NotchScreen" class="contentNotch" />
-      <view class="top-view">
+      <view v-if="type==='main'" class="top-view">
         <uni-search-bar
           class="top-serach"
           :radius="radius"
@@ -16,6 +20,16 @@
           @input="input"
         />
       </view>
+      <view v-if="type==='back'" class="top-back">
+        <view class="back-icon">
+          <uni-icons type="back" color="white" size="32" />
+        </view>
+        <view class="back-sub">
+          <text class="top-sub" @tap="submit">
+            发表
+          </text>
+        </view>
+      </view>
     </view>
   </uniTransition>
 </template>
@@ -28,6 +42,7 @@ import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue';
 export default {
   components: { uniTransition, uniSearchBar },
   props: {
+    type: { type: String, default: 'main' },
     value: { type: String, default: '' },
     cancelButton: { type: String, default: 'none' },
     placeholder: { type: String, default: '搜索' },
@@ -57,9 +72,9 @@ export default {
       uni.scanCode({
         success: (res) => {
           if (this.$testUrl(res.result)) {
-            uni.navigateTo({ url: `/pages/outBrow/outBrow?url=${res.result}` });
+            this.$navigateTo({ url: `/pages/outBrow/outBrow?url=${res.result}` });
           } else {
-            uni.navigateTo({
+            this.$navigateTo({
               url: `/pages/textView/textView?text=${res.result}`,
             });
           }
@@ -68,6 +83,9 @@ export default {
     },
     setting() {
       this.$emit('setting');
+    },
+    submit() {
+      this.$emit('submit');
     },
   },
 };
@@ -79,7 +97,7 @@ export default {
   margin-top: 0upx;
   width: 750upx;
   height: 56px;
-  background-color: white;
+  background-color: red;
 }
 .top-header-notch {
   display: flex;
@@ -87,7 +105,13 @@ export default {
   margin-top: 0upx;
   width: 750upx;
   height: 86px;
-  background-color: white;
+  background-color: red;
+}
+.top-serach {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
 }
 .contentNotch {
   width: 750upx;
@@ -101,5 +125,26 @@ export default {
   position: fixed;
   top: 0px;
   width: 750upx;
+}
+.top-back {
+  height: 56px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  color: white;
+  .back-icon {
+    flex: 1;
+  }
+  .back-sub {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    align-items: center;
+  }
+  .top-sub {
+    width: 100upx;
+  }
 }
 </style>

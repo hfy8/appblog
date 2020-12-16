@@ -181,7 +181,8 @@
 						// 消息框
 						uni.showToast({
 							icon: 'none',
-							title: this.msg
+							title: this.msg,
+							position: 'bottom',
 						})
 					}
 				}

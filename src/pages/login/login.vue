@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 12:20:22
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-24 18:19:06
+ * @LastEditTime: 2020-12-15 15:35:44
 -->
 <template>
   <view class="content">
@@ -12,7 +12,7 @@
       </view>
       <view class="input-group">
         <view class="input-row">
-          <input v-model="account" type="text" placeholder="手机或邮箱">
+          <input v-model="account" type="text" placeholder="账号">
         </view>
         <view class="input-row">
           <input v-model="password" type="password" placeholder="密码">
@@ -24,7 +24,7 @@
         </button>
       </view>
       <view class="action-row">
-        <text @tap="$emit('setCurrent','Message')">
+        <text @tap="$emit('setcurrent','Message')">
           短信验证码登陆
         </text>
       </view>
@@ -46,7 +46,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { getLoginToken } from '@/api/user/userApi';
+import Vue from 'vue';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   data() {
@@ -55,12 +57,40 @@ export default {
       password: '',
     };
   },
-  computed: mapState([]),
+  computed: {
+    ...mapState('follow', ['follows']),
+  },
   methods: {
-    ...mapActions(['getLoginToken']),
+    ...mapActions('follow', ['getFollows']),
     async forceLoginCheck() {
-      await this.getLoginToken();
+      await getLoginToken();
     },
+    async bindLogin() {
+      const result = await getLoginToken({
+        grant_type: 'password',
+        username: this.account,
+        password: this.password,
+        client_id: 'admin',
+        client_secret: 'admin',
+      });
+      const { data } = result;
+      if (data.access_token) {
+        uni.setStorage({ key: 'token', data: JSON.stringify(data) });
+        Object.assign(data);
+        Vue.axios.defaults.headers.Authorization = `${data.token_type} ${data.access_token}`;
+        await this.getFollows();
+        uni.setStorageSync('follows', JSON.stringify(this.follows));
+        uni.navigateTo({ url: '/pages/main/index' });
+      } else {
+        // 消息框
+        uni.showToast({
+          icon: 'none',
+          title: '登陆失败，请检查用户名和密码',
+          position: 'bottom',
+        });
+      }
+    },
+
   },
 };
 </script>

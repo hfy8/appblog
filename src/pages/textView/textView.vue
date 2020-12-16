@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-30 13:01:10
  * @LastEditors: bianjie
- * @LastEditTime: 2020-06-30 15:23:11
+ * @LastEditTime: 2020-11-30 19:07:27
 -->
 <template>
   <view class="content">
@@ -37,9 +37,9 @@ export default {
   methods: {
     search() {
       if (this.$testUrl(this.searchContent)) {
-        uni.navigateTo({ url: `/pages/outBrow/outBrow?url=${this.searchContent}` });
+        this.$navigateTo({ url: `/pages/outBrow/outBrow?url=${this.searchContent}` });
       } else {
-        uni.navigateTo({
+        this.$navigateTo({
           url: `/pages/textView/textView?text=${this.searchContent}`,
         });
       }
