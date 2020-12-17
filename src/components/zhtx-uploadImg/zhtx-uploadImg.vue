@@ -144,13 +144,11 @@ export default {
           sourceType: ["album", "camera"],
           success: (res) => {
             tempFiles = res.tempFilePaths;
-            this.files.push(res.tempFiles);
             this.imageList = this.imageList.concat(tempFiles);
             this.list.push(...tempFiles); // 如果图片一次性就超过这个值怎么使他赋的值回退
 
             // #ifdef H5
             if (this.list.length >= this.limit) {
-              this.files.splice(this.limit);
               this.list.splice(this.limit);
               toast("已达到最大上传数量");
               return;
@@ -174,7 +172,6 @@ export default {
       this.uploadImg(params);
     },
     async upload() {
-      // const files = [];
       uni.showLoading({
         title: "上传中...",
         mask: false,

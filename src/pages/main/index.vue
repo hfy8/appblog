@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 10:55:45
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 18:18:16
+ * @LastEditTime: 2020-12-17 18:34:26
 -->
 <template>
   <view class="content">
@@ -57,6 +57,9 @@ export default {
     },
   },
   mounted() {
+    this.$socketTask.onOpen((data) => {
+      console.log(JSON.stringify(data));
+    });
     const userInfo = uni.getStorageSync('token');
     if (!userInfo) {
       uni.navigateTo({ url: '/pages/login/index' });

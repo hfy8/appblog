@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-22 13:53:53
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-07 21:05:35
+ * @LastEditTime: 2020-12-17 18:32:49
  */
 import Vue from 'vue';
 import axios from 'axios';
@@ -25,20 +25,6 @@ Vue.component('top-bar', topBar);
 // 表单组件
 Vue.component('bj-form', bjxFrom);
 Vue.component('bj-form-item', bjxFromItem);
-const Minio = require('minio');
-
-let minioClient;
-try {
-  minioClient = new Minio.Client({
-    endPoint: '39.106.3.0',
-    port: 9000,
-    useSSL: false,
-    accessKey: 'minioadmin',
-    secretKey: 'minioadmin',
-  });
-} catch (error) {
-  console.log(error);
-}
 
 process.UNI_LIBRARIES = ['vant', '@dcloudio/uni-ui'];
 if (process.env.NODE_ENV === 'production') {
@@ -55,7 +41,6 @@ if (process.env.NODE_ENV === 'dev') {
 Vue.use(axiosPlugin);
 Vue.config.productionTip = false;
 Vue.prototype.$testUrl = validateUrl;
-Vue.prototype.$minio = minioClient;
 Vue.prototype.$uuid = uuid;
 Vue.$store = store;
 Vue.prototype.$navigateTo = navigateTo;
@@ -78,6 +63,22 @@ if (process.env.VUE_APP_PLATFORM === 'app-plus') {
     .then((result) => {
       Vue.prototype.baseConfig = result.data;
     }).then(() => {
+      const userInfo = uni.getStorageSync('token');
+      if (userInfo) {
+        const data = JSON.parse(userInfo);
+        Vue.prototype.$socketTask = uni.connectSocket({
+          url: `${Vue.prototype.baseConfig.SOCKET_URL}/${data.access_token}`,
+          header: {
+            Authorization: `${data.token_type} ${data.access_token}`,
+          },
+          compete: (da) => {
+            console.log(da);
+          },
+          fail: (er) => {
+            console.log(JSON.stringify(er));
+          },
+        });
+      }
       const app = new Vue({
         store,
         ...App,
