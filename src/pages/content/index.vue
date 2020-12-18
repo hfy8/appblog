@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-07-13 12:24:23
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 18:21:29
+ * @LastEditTime: 2020-12-18 17:56:50
 -->
 <template>
   <view class="content">
@@ -168,9 +168,11 @@ export default {
     },
     // 关注
     async follow() {
+      const data = JSON.parse(uni.getStorageSync('token'));
       await this.followUser({
         fuid: this.item.uid,
         funame: this.item.uname,
+        fuicon: data.uicon,
       });
       await this.getFollows();
     },

@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-28 16:15:25
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-09 14:00:04
+ * @LastEditTime: 2020-12-18 17:41:32
 -->
 <template>
   <uni-transition :class="placement" :mode-class="['slide-bottom']" :show="tabShow">
@@ -62,6 +62,8 @@ export default {
         {
           icon: 'contact',
           text: '联系人',
+          router: '/pages/contact/list/index',
+
         },
         {
           icon: 'person',

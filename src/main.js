@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-22 13:53:53
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-17 18:32:49
+ * @LastEditTime: 2020-12-18 16:10:57
  */
 import Vue from 'vue';
 import axios from 'axios';
@@ -67,16 +67,7 @@ if (process.env.VUE_APP_PLATFORM === 'app-plus') {
       if (userInfo) {
         const data = JSON.parse(userInfo);
         Vue.prototype.$socketTask = uni.connectSocket({
-          url: `${Vue.prototype.baseConfig.SOCKET_URL}/${data.access_token}`,
-          header: {
-            Authorization: `${data.token_type} ${data.access_token}`,
-          },
-          compete: (da) => {
-            console.log(da);
-          },
-          fail: (er) => {
-            console.log(JSON.stringify(er));
-          },
+          url: `${Vue.prototype.baseConfig.SOCKET_URL}/${data.token_type} ${data.access_token}`,
         });
       }
       const app = new Vue({

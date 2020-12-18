@@ -44,6 +44,21 @@
 				"navigationStyle": "custom"
 
 			}
+		},
+		{
+            "path" : "pages/contact/list/index",
+            "style": {
+				"navigationBarTitleText": "发表",
+				"navigationStyle": "custom"
+
+			}
+        },{
+            "path" : "pages/contact/board/index",
+            "style": {
+				"navigationBarTitleText": "发表",
+				"navigationStyle": "custom"
+
+			}
         }
     ],
 	"globalStyle": {
