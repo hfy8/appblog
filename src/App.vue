@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-22 13:53:53
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-17 15:23:47
+ * @LastEditTime: 2021-01-26 10:56:21
 -->
 <script>
 export default {
@@ -18,6 +18,6 @@ export default {
 };
 </script>
 
-<style>
-/*每个页面公共css */
+<style lang="scss">
+  @import "uview-ui/index.scss";
 </style>

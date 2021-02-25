@@ -169,6 +169,7 @@ export default {
       const params = {
         path,
       };
+      console.log(params);
       this.uploadImg(params);
     },
     async upload() {

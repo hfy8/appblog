@@ -2,14 +2,13 @@
  * @Author: bianjie
  * @Date: 2020-07-14 13:40:50
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-09 13:26:28
+ * @LastEditTime: 2021-01-04 09:57:11
  */
 /**
  * Created by zy on 2020/3/26.
  */
 import QueryString from 'querystring';
 import Vue from 'vue';
-import axios from 'axios';
 
 const envConfig = process.env;
 const BASE_URL = envConfig.VUE_APP_BASE_URL ? envConfig.VUE_APP_BASE_URL : '';

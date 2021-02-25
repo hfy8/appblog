@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-28 16:15:25
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-18 17:41:32
+ * @LastEditTime: 2021-01-11 16:55:06
 -->
 <template>
   <uni-transition :class="placement" :mode-class="['slide-bottom']" :show="tabShow">
@@ -40,9 +40,11 @@
 </template>
 <script>
 import uniTransition from '@/components/uni-transition/uni-transition.vue';
+import instanceList from '@/pages/instance/index.vue';
+import chatList from '@/pages/contact/list/index.vue';
 
 export default {
-  components: { uniTransition },
+  components: { uniTransition, instanceList, chatList },
   props: {
     current: { type: [Number, String], default: 0 },
     backgroundColor: { type: String, default: '#fbfbfb' },
@@ -50,37 +52,25 @@ export default {
     tintColor: { type: String, default: '#42b983' },
     placement: { type: String, default: 'bottom' },
     tabShow: { type: Boolean, default: true },
+    tabList: { type: Array, default: () => [] },
   },
   data() {
     return {
-      tabList: [
-        {
-          icon: 'heart',
-          text: '首页',
-          badge: 1,
-        },
-        {
-          icon: 'contact',
-          text: '联系人',
-          router: '/pages/contact/list/index',
-
-        },
-        {
-          icon: 'person',
-          text: '用户',
-          badgeDot: true,
-        },
-        {
-          icon: 'plus',
-          text: '发表',
-          router: '/pages/editor/index',
-        },
-      ],
       currentTabIndex: this.current,
     };
   },
+  mounted() {
+    this.tabList.forEach(
+      (e) => {
+        if (e.router) {
+          uni.preloadPage({ url: e.router });
+        }
+      },
+    );
+  },
   methods: {
     switchTab(index) {
+      this.tabList[index].badgeDot = false;
       this.currentTabIndex = index;
       this.$emit('click', index);
     },

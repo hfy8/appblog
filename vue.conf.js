@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-19 17:29:48
  * @LastEditors: bianjie
- * @LastEditTime: 2020-10-23 17:26:24
+ * @LastEditTime: 2021-01-27 09:43:08
  */
 const serverProxy = { // 配置跨域
   // 'http://localhost:9000/labels': {
@@ -14,7 +14,6 @@ const serverProxy = { // 配置跨域
   //   },
   // },
 };
-const env = process.env.NODE_ENV;
 
 module.exports = {
   // 输出文件目录   文件夹名
@@ -25,7 +24,9 @@ module.exports = {
   },
   // eslint-loader 是否在保存的时候检查
   lintOnSave: true,
-  publicPath: env === 'production' ? '/blog-static' : '/',
+  assetsDir: './',
+  // 指定生成的 index.html 的输出路径 (相对于 outputDir)。也可以是一个绝对路径    index的路劲和名字
+  indexPath: './index.html',
   css: {
     loaderOptions: {
       less: {

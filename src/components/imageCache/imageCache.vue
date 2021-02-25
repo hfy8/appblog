@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-12-09 17:03:38
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 16:57:03
+ * @LastEditTime: 2021-02-05 11:37:13
 -->
 <template>
   <image
@@ -15,15 +15,21 @@
 </template>
 
 <script>
+import { getStorage, setStorage } from '@/util/util';
+
 export default {
   props: {
     url: String,
     mode: String,
     clas: String,
+    type: {
+      type: String,
+      default: 'user',
+    },
   },
   data() {
     return {
-      path: uni.getStorageSync(this.url) || this.downLoadFile(this.url),
+      path: getStorage(this.url) || this.downLoadFile(this.url),
     };
   },
   watch: {
@@ -35,6 +41,11 @@ export default {
     reload() {
       this.downLoadFile(this.url);
     },
+    reset() {
+      console.log(this.url);
+      uni.removeStorageSync(this.url);
+      this.downLoadFile(this.url);
+    },
     downLoadFile(url) {
       uni.downloadFile({
         url, // 仅为示例，并非真实的资源
@@ -44,8 +55,13 @@ export default {
             // #ifdef APP-PLUS
             uni.saveFile(res.tempFilePath);
             // #endif
-            uni.setStorageSync(this.url, res.tempFilePath);
+            setStorage(this.url, res.tempFilePath);
+          } else {
+            this.downLoadFile(`${this.baseConfig.API_PATH}minio/down/${this.type === 'user' ? 'no-icon.png' : 'no-img.png'}`);
           }
+        },
+        error: () => {
+          this.downLoadFile(`${this.baseConfig.API_PATH}minio/down/${this.type === 'user' ? 'no-icon.png' : 'no-img.png'}`);
         },
       });
     },

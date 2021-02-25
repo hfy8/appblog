@@ -1,0 +1,4 @@
+{
+  "API_PATH": "http://www.nxnsa.com:10000/",
+  "SOCKET_URL": "ws://www.nxnsa.com:8989/connectWebSocket"
+}

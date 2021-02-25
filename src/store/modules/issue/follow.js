@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-12-15 13:59:55
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 14:35:33
+ * @LastEditTime: 2021-01-18 14:43:07
  */
 import Vue from 'vue';
 import { axiosGet, axiosPost } from '@/util/api-util';
@@ -16,11 +16,17 @@ export default {
     follows: [],
   },
   mutations: {
+    reset(state, val) {
+      state[val] = JSON.parse(JSON.stringify(state[val]));
+    },
     [GET_FOLLOW_LIST.REQUEST](state) {
       state.follows = [];
     },
     [GET_FOLLOW_LIST.SUCCESS](state, payload) {
-      state.follows = payload.data;
+      state.follows = payload.data.map((e) => {
+        Object.assign(e, { message: [] });
+        return e;
+      });
     },
     [GET_FOLLOW_LIST.FAIL](state) {
       state.follows = [];

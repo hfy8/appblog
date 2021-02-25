@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-11-02 09:56:45
  * @LastEditors: bianjie
- * @LastEditTime: 2020-11-02 10:14:35
+ * @LastEditTime: 2021-01-12 14:52:06
 -->
 <template>
   <view class="content">

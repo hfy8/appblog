@@ -1,9 +1,38 @@
 {
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
 	"pages": [
 		{
-			"path": "pages/main/index",
+			"path": "pages/instance/index",
 			"style": {
-				"navigationBarTitleText": "uni-app",
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": {
+						"type":"default",
+						"backgroundColor":"#FF0000",
+						"buttons": [
+							{
+								"float": "left",
+								"fontSize": "18px",
+								"text": "动态",
+								"width":"auto"
+							},
+							{
+								"fontSrc": "/static/iconfont/iconfont.ttf",
+								"float": "right",
+								"text": "\ue9c9"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/instance/selfIndex",
+			"style": {
+				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
 		},
@@ -36,31 +65,125 @@
 				"navigationStyle": "custom"
 
 			}
-		}
-	    ,{
+		},
+		{
+			"path": "pages/login/info",
+			"style": {
+				"navigationBarTitleText": "其他登陆",
+				"navigationStyle": "custom"
+
+			}
+		},
+	    {
             "path" : "pages/editor/index",
             "style": {
-				"navigationBarTitleText": "发表",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": {
+						"type":"default",
+						"backgroundColor":"#FF0000",
+						"buttons": [
+							{
+								"float": "right",
+								"fontSize": "18px",
+								"text": "发表",
+								"width":"auto"
+							}
+						]
+					}
+				}
 
 			}
 		},
 		{
             "path" : "pages/contact/list/index",
             "style": {
-				"navigationBarTitleText": "发表",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": {
+						"type":"default",
+						"backgroundColor":"#FF0000",
+						"buttons": [
+							{
+								"float": "left",
+								"fontSize": "18px",
+								"text": "消息",
+								"width":"auto"
+							},
+							{
+							"fontSrc": "/static/iconfont/iconfont.ttf",
+							"float": "right",
+							"text": "\ue786"
+						}]
+					}
+				}
 
 			}
         },{
-            "path" : "pages/contact/board/index",
+            "path" : "pages/contact/chat/chat",
             "style": {
-				"navigationBarTitleText": "发表",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh":true,
+				"app-plus": {
+					"softinputNavBar": "none",
+					"softinputMode": "adjustPan",
+					"titleNView": {
+						"backgroundColor":"#FF0000",
+						"buttons": [{
+							"fontSrc": "/static/iconfont/iconfont.ttf",
+							"float": "right",
+							"text": "\ue626"
+						}
+						]
+					}
+				}
+
+			}
+		},
+		{
+            "path" : "pages/control/index",
+            "style": {
+				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
 
 			}
-        }
-    ],
+		}
+	],
+	"tabBar": {
+		"color":"#8a8a8a",
+		"selectedColor":"#d4237a",
+		"borderStyle":"black",
+		"backgroundColor":"#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/instance/index",
+				"text":"首页",
+				"iconPath":"static/image/cl.png",
+				"selectedIconPath":"static/image/clr.png"
+
+			},
+			{
+				"pagePath" : "pages/contact/list/index",
+				"text":"聊天",
+				"iconPath":"static/image/nt.png",
+				"selectedIconPath":"static/image/ntr.png"
+			},
+			{
+				"pagePath":"pages/instance/selfIndex",
+				"text":"用户",
+				"iconPath":"static/image/ct.png",
+				"selectedIconPath":"static/image/ctr.png"
+			},
+			{
+				"pagePath":"pages/control/index",
+				"text":"我的",
+				"iconPath":"static/image/w.png",
+				"selectedIconPath":"static/image/wr.png"
+			}
+		]	
+	 },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

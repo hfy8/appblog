@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 12:20:22
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 15:35:44
+ * @LastEditTime: 2021-01-29 17:42:32
 -->
 <template>
   <view class="content">
@@ -12,20 +12,27 @@
       </view>
       <view class="input-group">
         <view class="input-row">
-          <input v-model="account" type="text" placeholder="账号">
+          <u-input v-model="account" type="textarea" placeholder="账号" />
         </view>
         <view class="input-row">
-          <input v-model="password" type="password" placeholder="密码">
+          <u-input v-model="password" type="password" placeholder="密码" />
         </view>
       </view>
       <view class="btn-row">
-        <button type="primary" class="primary" @tap="bindLogin">
+        <button
+          type="primary"
+          class="primary"
+          @tap="bindLogin(account, password)"
+        >
           登录
         </button>
       </view>
       <view class="action-row">
-        <text @tap="$emit('setcurrent','Message')">
+        <text @tap="$emit('setCurrent', 'Message')">
           短信验证码登陆
+        </text>
+        <text class="zhu-ce" @tap="$emit('setCurrent', 'Register')">
+          注册
         </text>
       </view>
     </view>
@@ -35,10 +42,20 @@
       </text>
       <view class="icon-row">
         <view class="icon-link">
-          <uni-icons type="weixin" size="25" class="weixin" />
+          <uni-icons
+            type="weixin"
+            size="25"
+            class="weixin"
+            @tap="otherLogin('weixin')"
+          />
         </view>
         <view class="icon-link">
-          <uni-icons type="weibo" size="25" class="weibo" />
+          <uni-icons
+            type="weibo"
+            size="25"
+            class="weibo"
+            @tap="otherLogin('sinaweibo')"
+          />
         </view>
       </view>
     </view>
@@ -46,8 +63,7 @@
 </template>
 
 <script>
-import { getLoginToken } from '@/api/user/userApi';
-import Vue from 'vue';
+import { bindLogin, otherLogin } from '@/util/util';
 import { mapActions, mapState } from 'vuex';
 
 export default {
@@ -55,6 +71,8 @@ export default {
     return {
       account: '',
       password: '',
+      bindLogin,
+      otherLogin,
     };
   },
   computed: {
@@ -62,35 +80,6 @@ export default {
   },
   methods: {
     ...mapActions('follow', ['getFollows']),
-    async forceLoginCheck() {
-      await getLoginToken();
-    },
-    async bindLogin() {
-      const result = await getLoginToken({
-        grant_type: 'password',
-        username: this.account,
-        password: this.password,
-        client_id: 'admin',
-        client_secret: 'admin',
-      });
-      const { data } = result;
-      if (data.access_token) {
-        uni.setStorage({ key: 'token', data: JSON.stringify(data) });
-        Object.assign(data);
-        Vue.axios.defaults.headers.Authorization = `${data.token_type} ${data.access_token}`;
-        await this.getFollows();
-        uni.setStorageSync('follows', JSON.stringify(this.follows));
-        uni.navigateTo({ url: '/pages/main/index' });
-      } else {
-        // 消息框
-        uni.showToast({
-          icon: 'none',
-          title: '登陆失败，请检查用户名和密码',
-          position: 'bottom',
-        });
-      }
-    },
-
   },
 };
 </script>
@@ -146,13 +135,11 @@ export default {
   }
   height: 100vh;
 }
-.input-group {
-  .input-row {
-    margin-bottom: 60upx;
-    border-bottom: 1upx solid #e6ebf0;
-    :first-child {
-      margin-bottom: 30upx;
-    }
+.btn-row {
+  margin-bottom: 20upx;
+  margin-top: 30upx;
+  .plain {
+    border: none !important;
   }
 }
 .action-row {
@@ -164,5 +151,9 @@ export default {
   margin-top: 20upx;
   color: #007aff;
   font-size: 25upx;
+  flex: 1;
+}
+.zhu-ce{
+  text-align: right;
 }
 </style>>

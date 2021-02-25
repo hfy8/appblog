@@ -2,22 +2,22 @@
  * @Author: bianjie
  * @Date: 2020-06-22 12:33:25
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 12:14:39
+ * @LastEditTime: 2021-01-21 18:32:21
  */
 import Vue from 'vue';
 import { axiosGet, axiosPost } from '@/util/api-util';
 import { buildMutType } from '@/util/mutationTool';
+import { dataControl } from '@/util/util';
 
 const GET_GLOBAL_ISSUE_LIST = buildMutType('GLOBAL_ISSUE_LIST');
 const GET_ISSUE_LIST = buildMutType('GET_ISSUE_LIST');
 const GET_COMMENTS_LIST = buildMutType('GET_COMMENTS_LIST');
-
 export default {
   namespaced: true,
   state: {
     issueGlobalList: [],
     globalTotal: 0,
-    issueList: [],
+    issueList: {},
     total: 0,
     comments: [],
     commentTotal: 0,
@@ -33,18 +33,15 @@ export default {
     [GET_GLOBAL_ISSUE_LIST.FAIL](state) {
       state.issueGlobalList = [];
     },
-    [GET_ISSUE_LIST.REQUEST](state) {
-      state.issueList = [];
+    [GET_ISSUE_LIST.REQUEST]() {
     },
     [GET_ISSUE_LIST.SUCCESS](state, payload) {
       state.total = payload.total;
-      state.issueList = payload.data;
+      state.issueList = dataControl(state.issueList, payload.data);
     },
-    [GET_ISSUE_LIST.FAIL](state) {
-      state.issueList = [];
+    [GET_ISSUE_LIST.FAIL]() {
     },
-    [GET_COMMENTS_LIST.REQUEST](state) {
-      state.comments = [];
+    [GET_COMMENTS_LIST.REQUEST]() {
     },
     [GET_COMMENTS_LIST.SUCCESS](state, payload) {
       state.commentTotal = payload.total;
@@ -63,6 +60,15 @@ export default {
         `${Vue.prototype.baseConfig.API_PATH}issue/lists`,
         params,
         GET_GLOBAL_ISSUE_LIST,
+      );
+    },
+    // 获取全局动态列表
+    getIssueList({ commit }, params) {
+      return axiosGet(
+        commit,
+        `${Vue.prototype.baseConfig.API_PATH}issue/list`,
+        params,
+        GET_ISSUE_LIST,
       );
     },
     // 发布动态
@@ -84,13 +90,21 @@ export default {
         '',
       );
     },
-
+    // 删除动态
+    delIssue({ commit }, params) {
+      return axiosPost(
+        commit,
+        `${Vue.prototype.baseConfig.API_PATH}issue/delete/${params}`,
+        '',
+        '',
+      );
+    },
     // 获取动态评论
     getComments({ commit }, params) {
       return axiosGet(
         commit,
         `${Vue.prototype.baseConfig.API_PATH}comment/lists/${params.did}`,
-        '',
+        params.params,
         GET_COMMENTS_LIST,
       );
     },
@@ -101,6 +115,15 @@ export default {
         commit,
         `${Vue.prototype.baseConfig.API_PATH}comment/create`,
         params,
+        '',
+      );
+    },
+    // 删除评论
+    delComment({ commit }, params) {
+      return axiosPost(
+        commit,
+        `${Vue.prototype.baseConfig.API_PATH}comment/delete/${params.cid}`,
+        '',
         '',
       );
     },

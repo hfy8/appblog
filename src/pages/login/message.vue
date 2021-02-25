@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 16:48:28
  * @LastEditors: bianjie
- * @LastEditTime: 2020-09-25 19:37:26
+ * @LastEditTime: 2021-01-27 18:00:27
 -->
 <template>
   <view class="content">
@@ -12,47 +12,59 @@
       </view>
       <view class="input-group">
         <view class="input-row">
-          <input v-model="account" type="text" placeholder="手机或邮箱">
+          <u-input v-model="phone" type="textarea" placeholder="手机" />
+        </view>
+        <view class="input-code">
+          <u-input v-model="code" type="textarea" placeholder="请输入验证码" />
+          <text class="time-bth" :class="disable?'time-on':''" @tap="sendCode">
+            {{ !disable?'发送验证码':time+'s' }}
+          </text>
         </view>
       </view>
       <view class="btn-row">
-        <button type="primary" class="primary" @tap="bindLogin">
-          发送验证码
+        <button type="primary" :disabled="!phone||!code" class="primary" @tap="phoneLogin(phone,code)">
+          确认登陆
         </button>
       </view>
-      <view class="btn-row">
-        c
-        <button plain class="plain" @tap="$emit('set-current','Login')">
+      <view class="action-row">
+        <text @tap="$emit('setCurrent', 'Login')">
           密码登陆
-        </button>
-      </view>
-    </view>
-    <view class="way-row">
-      <text class="other-way">
-        其他登陆方式
-      </text>
-      <view class="icon-row">
-        <view class="icon-link">
-          <uni-icons type="weixin" size="25" class="weixin" />
-        </view>
-        <view class="icon-link">
-          <uni-icons type="weibo" size="25" class="weibo" />
-        </view>
+        </text>
       </view>
     </view>
   </view>
 </template>
 
 <script>
+import { sendCode } from '@/api/user/userApi';
+import { phoneLogin } from '@/util/util';
 
 export default {
   data() {
     return {
-      account: '',
-      password: '',
+      phone: '',
+      code: '',
+      disable: false,
+      time: 60,
+      interval: undefined,
+      phoneLogin,
     };
   },
   methods: {
+    sendCode() {
+      if (this.phone) {
+        sendCode(this.phone);
+        this.disable = true;
+        this.interval = setInterval(() => {
+          this.time -= 1;
+          if (this.time === 0) {
+            this.disable = false;
+            this.time = 60;
+            clearInterval(this.interval);
+          }
+        }, 1000);
+      }
+    },
   },
 };
 </script>
@@ -111,29 +123,34 @@ export default {
   }
   height: 100vh;
 }
-.input-group {
-  .input-row {
-    margin-bottom: 60upx;
-    border-bottom: 1upx solid #e6ebf0;
-    :first-child {
-      margin-bottom: 30upx;
-    }
+.btn-row {
+  margin-bottom: 20upx;
+  margin-top: 30upx;
+  .plain {
+    border: none !important;
   }
 }
+
 .action-row {
   display: flex;
   flex-direction: row;
 }
 
-.action-row navigator {
+.action-row text {
   margin-top: 20upx;
   color: #007aff;
   font-size: 25upx;
 }
-.btn-row {
-  margin-bottom: 20upx;
-  .plain {
-    border: none !important;
-  }
+.time-bth{
+  position: relative;
+  height: 48px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.input-code{
+  display: flex;
+}
+.time-on{
+  color:rgb(192, 196, 204)
 }
 </style>>

@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-10-26 12:10:26
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-08 15:45:00
+ * @LastEditTime: 2021-01-04 11:20:58
  */
 /**
  * Created by zy on 2020/4/9.
@@ -71,7 +71,7 @@ export default {
       },
       (error) => {
         // 此处进行异常处理
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || error.response.status === 500) {
           uni.navigateTo({ url: '/pages/login/index' });
           return;
         }

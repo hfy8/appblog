@@ -2,10 +2,15 @@
  * @Author: bianjie
  * @Date: 2020-06-24 12:20:22
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 16:34:53
+ * @LastEditTime: 2021-02-05 10:03:32
 -->
 <template>
-  <view class="label-content">
+  <view
+    class="label-content"
+    @longpress="moreAction"
+    @touchmove="touchmove"
+    @touchend="touchend"
+  >
     <view class="label-body">
       <view class="title" @tap="showDetail(content)">
         <text>{{ content.title }}</text>
@@ -16,6 +21,7 @@
             clas="user-picture"
             :url="`${baseConfig.API_PATH}minio/down/${content.uicon}`"
             mode="scaleToFill"
+            type="img"
           />
         </view>
         <text class="user-name">
@@ -25,11 +31,15 @@
       <view class="uni-flex uni-row">
         <view class="flex-item" @tap="showDetail(content)">
           <view class="pre-text">
-            <text>{{ content.content.replace(/<[^>]+>/g,"") }}</text>
+            <text>
+              {{
+                // eslint-disable-next-line vue/no-parsing-error
+                content.content.replace(/<[^>]+>/g,"") }}
+            </text>
           </view>
         </view>
         <view v-show="content.images" class="flex-image">
-          <imageCache class="info-image" :url="`${this.baseConfig.API_PATH}minio/down/${content.images.split(',')[0]}`" mode="scaleToFill" @tap="previewImg" />
+          <imageCache class="info-image" :url="`${baseConfig.API_PATH}minio/down/${content.images.split(',')[0]}`" mode="scaleToFill" @tap="previewImg" />
         </view>
       </view>
       <view class="footer">
@@ -37,11 +47,17 @@
           {{ content.thumbUp }} 赞同.{{ content.discussNum }} 讨论
         </view>
       </view>
+      <view v-if="content.uid===token.userId&&more" class="more">
+        <view class="operation" @tap="delIssue(content.did)">
+          <text>删除</text>
+        </view>
+      </view>
     </view>
   </view>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import imageCache from '../imageCache/imageCache.vue';
 
 export default {
@@ -57,9 +73,13 @@ export default {
       uicon: '',
       icon: '',
       url: '',
+      more: false,
+      token: JSON.parse(uni.getStorageSync('token')),
+      scrolling: false,
     };
   },
   methods: {
+    ...mapActions('issue', ['delIssue']),
     // 详情页面
     showDetail(item) {
       this.$navigateTo({ url: `/pages/content/index?item=${encodeURIComponent(JSON.stringify(item))}` });
@@ -70,6 +90,19 @@ export default {
         current: e.target.dataset.src,
         urls: [e.target.dataset.src],
       });
+    },
+    // 显示更多操作
+    moreAction() {
+      if (this.scrolling) {
+        return;
+      }
+      this.more = true;
+    },
+    touchmove() {
+      this.scrolling = true;
+    },
+    touchend() {
+      this.scrolling = false;
     },
   },
 };
@@ -153,6 +186,19 @@ export default {
       .footer-chat {
         margin-left: 10upx;
       }
+    }
+  }
+  .more{
+    font-size: 25upx;
+    font-family: Helvetica Neue, Helvetica, Roboto, Segoe UI, Arial, sans-serif;
+    color: #999;
+    display: flex;
+    .operation {
+      flex: 1;
+      vertical-align: middle;
+      align-items: flex-end;
+      text-align: right;
+      color:#337DFF;
     }
   }
 }

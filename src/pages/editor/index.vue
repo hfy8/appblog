@@ -2,11 +2,10 @@
  * @Author: bianjie
  * @Date: 2020-07-08 17:42:10
  * @LastEditors: bianjie
- * @LastEditTime: 2020-12-15 18:18:57
+ * @LastEditTime: 2021-01-12 15:59:53
 -->
 <template>
   <view class="content">
-    <top-bar v-model="searchContent" :type="'back'" @submit="issueSubmit" @confirm="search" />
     <view class="content-body">
       <bj-form
         ref="form"
@@ -107,6 +106,9 @@ export default {
       },
     };
   },
+  onNavigationBarButtonTap() {
+    this.issueSubmit();
+  },
   onBackPress(options) {
     if (options.from === 'navigateBack') {
       return true;
@@ -163,7 +165,7 @@ export default {
             images: splitArray(images, ','),
           };
           await this.plicIssue(params);
-          this.$navigateTo({ url: '/pages/main/index' });
+          uni.switchTab({ url: '/pages/instance/index' });
         }
       });
     },
