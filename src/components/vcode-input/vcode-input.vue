@@ -105,7 +105,7 @@ export default {
   methods: {
     initInput() {
       this.focus = true;
-      // #ifdef H5
+      // #ifdef H5 || MP-WEIXIN
       this.$refs.vcodeInput.$refs.input.setAttribute('type', 'number');
       this.$refs.vcodeInput.$refs.input.setAttribute('pattern', '[0-9]*');
       // #endif

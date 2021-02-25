@@ -3,7 +3,7 @@
     <!-- #ifdef APP-NVUE -->
     <loading-indicator v-if="!webviewHide && status === 'loading' && showIcon" :style="{color: color,width:iconSize+'px',height:iconSize+'px'}" :animating="true" class="uni-load-more__img uni-load-more__img--nvue" />
     <!-- #endif -->
-    <!-- #ifdef H5 -->
+    <!-- #ifdef H5 || MP-WEIXIN -->
     <svg
       v-if="!webviewHide && (iconType==='circle' || iconType==='auto' && platform === 'android') && status === 'loading' && showIcon"
       width="24"
@@ -253,7 +253,7 @@ export default {
 
 	/* #endif */
 
-	/* #ifdef H5 */
+	/* #ifdef H5 || MP-WEIXIN */
 	.uni-load-more__img--android-H5 {
 		animation: loading-android-H5-rotate 2s linear infinite;
 		transform-origin: center center;

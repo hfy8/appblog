@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-24 12:20:22
  * @LastEditors: bianjie
- * @LastEditTime: 2021-02-05 10:03:41
+ * @LastEditTime: 2021-02-25 15:41:35
 -->
 <template>
   <view class="label-content" @longtap="moreAction">
@@ -14,17 +14,15 @@
         <view class="flex-item" @tap="showDetail(content)">
           <view class="pre-text">
             <text>
-              {{
-                // eslint-disable-next-line vue/no-parsing-error
-                content.content.replace(/<[^>]+>/g,"") }}
+              {{ content.content.replace(/<[^>]+>/g,"") }}
             </text>
           </view>
         </view>
-        <view v-show="content.images" class="flex-image">
+        <view v-show="content.images!==null" class="flex-image">
           <imageCache
             class="info-image"
             type="img"
-            :url="`${baseConfig.API_PATH}minio/down/${content.images.split(',')[0]}`"
+            :url="baseConfig.API_PATH+`minio/down/`+content.images.split(',')[0]"
             mode="scaleToFill"
             @tap="previewImg"
           />

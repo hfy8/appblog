@@ -2,7 +2,7 @@
  * @Author: bianjie
  * @Date: 2020-06-28 16:15:25
  * @LastEditors: bianjie
- * @LastEditTime: 2021-01-11 16:55:06
+ * @LastEditTime: 2021-02-25 15:37:19
 -->
 <template>
   <uni-transition :class="placement" :mode-class="['slide-bottom']" :show="tabShow">
@@ -22,10 +22,10 @@
 
               :style="[currentTabIndex == index ? {'color': tintColor} : {'color': color}]"
             />
-            <text v-if="item.badge" class="uni_badge">
+            <text v-if="item.badge!==false" class="uni_badge">
               {{ item.badge }}
             </text>
-            <text v-if="item.badgeDot" class="uni_badge uni_badge_dot" />
+            <text v-if="item.badgeDot!==false" class="uni_badge uni_badge_dot" />
           </view>
           <view
             class="text"

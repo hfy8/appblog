@@ -2,20 +2,20 @@
  * @Author: bianjie
  * @Date: 2020-12-18 17:04:32
  * @LastEditors: bianjie
- * @LastEditTime: 2021-02-05 16:25:38
+ * @LastEditTime: 2021-02-25 16:05:41
 -->
 <template>
   <view class="content">
-    <view v-if="follows.length===0&&temUsers.length===0" class="no-info">
+    <view v-if="follows.length==0&&temUsers.length==0" class="no-info">
       当前没有消息
     </view>
-    <view v-for="item in follows" :key="item.fuid" class="item">
-      <navigator :url="`/pages/contact/chat/chat?fuid=${item.fuid}`" class="user-item" open-type="navigate">
+    <view v-for="(item,index) in follows" :key="index" class="item">
+      <navigator :url="`/pages/contact/chat/chat?fuid=`+item.fuid" class="user-item" open-type="navigate">
         <view>
           <view class="img">
             <imageCache
               clas="user-picture"
-              :url="`${baseConfig.API_PATH}minio/down/${item.fuicon}`"
+              :url="baseConfig.API_PATH+`minio/down/`+item.fuicon"
               mode="scaleToFill"
               :badge="item.message.length"
             />
@@ -36,14 +36,14 @@
               </text>
             </view>
             <view class="last">
-              <text v-if="item.fuid in items&&items[String(item.fuid)].createTime">
-                {{ items[String(item.fuid)].createTime }}
+              <text>
+                {{ showFoll(item)? items[String(item.fuid)].createTime:'' }}
               </text>
             </view>
           </view>
           <view class="message-lst">
-            <text v-if="item.fuid in items">
-              {{ items[String(item.fuid)].content }}
+            <text>
+              {{ showFollMessage(item) ?items[String(item.fuid)].content:'' }}
             </text>
           </view>
         </view>
@@ -55,7 +55,7 @@
           <view class="img">
             <imageCache
               clas="user-picture"
-              :url="`${baseConfig.API_PATH}minio/down/${it.fuicon}`"
+              :url="baseConfig.API_PATH+`minio/down/`+it.fuicon"
               mode="scaleToFill"
             />
             <u-badge
@@ -75,14 +75,14 @@
               </text>
             </view>
             <view class="last">
-              <text v-if="it.fuid in temItems&&temItems[String(it.fuid)].createTime">
-                {{ temItems[String(it.fuid)].createTime }}
+              <text>
+                {{ showTem(it)?temItems[String(it.fuid)].createTime:'' }}
               </text>
             </view>
           </view>
           <view class="message-lst">
-            <text v-if="it.fuid in temItems">
-              {{ temItems[String(it.fuid)].content }}
+            <text>
+              {{ showTemMessage(it)?temItems[String(it.fuid)].content:'' }}
             </text>
           </view>
         </view>
@@ -138,6 +138,18 @@ export default {
     }
   },
   methods: {
+    showTem(it) {
+      return it.fuid in this.temItems && this.temItems[String(it.fuid)].createTime;
+    },
+    showTemMessage(it) {
+      return it.fuid in this.temItems;
+    },
+    showFoll(item) {
+      return item.fuid in this.items && this.items[String(item.fuid)].createTime;
+    },
+    showFollMessage(item) {
+      return item.fuid in this.items;
+    },
     compare(follows, temUsers) {
       follows.forEach((e) => {
         const index = temUsers.findIndex((el) => el.fuid === e.fuid);

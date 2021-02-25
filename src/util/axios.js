@@ -2,24 +2,49 @@
  * @Author: bianjie
  * @Date: 2020-10-26 12:10:26
  * @LastEditors: bianjie
- * @LastEditTime: 2021-01-04 11:20:58
+ * @LastEditTime: 2021-02-25 19:31:51
  */
 /**
  * Created by zy on 2020/4/9.
  */
-import axios from 'axios';
+// #ifdef H5 || APP-PLUS
+import axiosApi from 'axios';
+// #endif
+// #ifdef MP-WEIXIN
+import wxApi from 'wx-axios-promise';
+// #endif
+
 import { STATUS_CODE, SELF_ERROR_MANAGE_HEADER_NAME } from './constant';
 
+let axios;
+// #ifdef H5 || APP-PLUS
+axios = axiosApi;
+// #endif
+// #ifdef MP-WEIXIN
+axios = wxApi;
+// #endif
 // respone拦截器
 export default {
   install(Vue) {
     // 创建axios实例
-    const service = axios.create({
+    let service;
+    // #ifdef MP-WEIXIN
+    service = axios({
+      header: {
+        zone: 'SLINE',
+      },
+    });
+    console.log(service);
+    // #endif
+    // #ifdef H5 || APP-PLUS
+    service = axios.create({
       timeout: 30000, // 请求超时时间
       headers: {
         zone: 'SLINE',
       },
     });
+    // #endif
+
     service.interceptors.response.use(
       (response) => {
         const resData = response.data;
@@ -79,6 +104,7 @@ export default {
         return Promise.reject(error);
       },
     );
+    // #ifdef H5 || APP-PLUS
     axios.defaults.adapter = function (config) { // 自己定义个适配器，用来适配uniapp的语法
       return new Promise((resolve, reject) => {
         const settle = require('axios/lib/core/settle');
@@ -131,6 +157,7 @@ export default {
         });
       });
     };
+    // #endif
     // eslint-disable-next-line no-param-reassign
     Vue.axios = service;
   },

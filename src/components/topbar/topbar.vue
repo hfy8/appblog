@@ -4,8 +4,8 @@
     :class="{'fixed-top':fixed}"
     :show="topShow"
   >
-    <view :class="NotchScreen?'top-header-notch':'top-header'">
-      <view v-if="NotchScreen" class="contentNotch" />
+    <view :class="NotchScreen!==false?'top-header-notch':'top-header'">
+      <view v-if="NotchScreen!==false" class="contentNotch" />
       <view v-if="type==='main'" class="top-view">
         <uni-search-bar
           class="top-serach"

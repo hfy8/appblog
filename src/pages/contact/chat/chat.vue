@@ -232,7 +232,7 @@ export default {
         // #endif
         if (val.length > 0) {
           this.messageList = [...this.messageList, ...val];
-          // #ifdef H5
+          // #ifdef H5 || MP-WEIXIN
           this.setMessage({ user: this.item.fuid, [this.item.fuid]: [...val] });
           // #endif
           this.item.message = [];
@@ -279,7 +279,7 @@ export default {
       // 获取节点信息
       setTimeout(() => {
         this.loading = false;
-        // #ifdef H5
+        // #ifdef H5 || MP-WEIXIN
         if (this.item.fuid in this.messages) {
           this.messageList = [...this.messages[this.item.fuid]];
         } else {
@@ -357,7 +357,7 @@ export default {
         type: 1,
       };
       this.messageList.push(params);
-      // #ifdef H5
+      // #ifdef H5 || MP-WEIXIN
       this.setMessage({ user: this.item.fuid, [this.item.fuid]: [params] });
       // #endif
       // #ifdef APP-PLUS
@@ -394,7 +394,7 @@ export default {
         }
         // #endif
         // h5浏览器并没有很好的办法控制键盘一直处于唤起状态 而且会有样式性的问题
-        // #ifdef H5
+        // #ifdef H5 || MP-WEIXIN
         uni.hideKeyboard();
         // #endif
       });
@@ -576,7 +576,7 @@ export default {
   },
   onReady() {
     // 自定义返回按钮 因为原生的返回按钮不可阻止默认事件
-    // // #ifdef H5
+    // // #ifdef H5 || MP-WEIXIN
     // const icon = document.getElementsByClassName('uni-page-head-btn')[0];
     // icon.style.display = 'none';
     // // #endif

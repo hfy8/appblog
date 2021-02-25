@@ -64,7 +64,7 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wx45e29c06974585e9",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
@@ -74,7 +74,7 @@
         "usingComponents" : true,
         "permission" : {
             "scope.userLocation" : {
-                "desc" : ""
+                "desc" : "需要定位用为城市"
             }
         }
     },

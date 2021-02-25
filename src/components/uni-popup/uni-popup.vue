@@ -254,7 +254,7 @@ export default {
 	}
 
 	.top {
-		/* #ifdef H5 */
+		/* #ifdef H5 || MP-WEIXIN */
 		top: var(--window-top);
 		/* #endif */
 		/* #ifndef H5 */

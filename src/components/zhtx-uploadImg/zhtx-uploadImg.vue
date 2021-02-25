@@ -147,7 +147,7 @@ export default {
             this.imageList = this.imageList.concat(tempFiles);
             this.list.push(...tempFiles); // 如果图片一次性就超过这个值怎么使他赋的值回退
 
-            // #ifdef H5
+            // #ifdef H5 || MP-WEIXIN
             if (this.list.length >= this.limit) {
               this.list.splice(this.limit);
               toast("已达到最大上传数量");
